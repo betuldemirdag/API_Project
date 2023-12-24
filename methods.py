@@ -1,5 +1,3 @@
-import pandas as pd
-
 def collect_channel_stats(youtube, channel_ids):
     """
     Get channel statistics: title, subscriber count, view count, video count, upload playlist
@@ -23,7 +21,20 @@ def collect_channel_stats(youtube, channel_ids):
 
     response = request.execute()
 
+    # loop through items in response
+    for item in response["items"]:
+        data = {'channelName': item['snippet']['title'],
+                'subscribers': item['statistics']['subscriberCount'],
+                'views': item['statistics']['viewCount'],
+                'totalVideos': item['statistics']['videoCount'],
+                'playlistId': item['contentDetails']['relatedPlaylists']['uploads']
+        }
+        all_data.append(data)
     
+    return pd.DataFrame(all_data)
+
+
+
 def collect_video_ids(youtube, playlist_id):
     """
     Get list of video IDs of all videos in the given playlist
@@ -41,9 +52,9 @@ def collect_video_ids(youtube, playlist_id):
     video_ids = []
 
     request = youtube.playlistItems().list(
-        part="snippet,contentDetails",
-        playlistId=playlist_id,
-        maxResults=50
+            part="snippet,contentDetails",
+            playlistId=playlist_id,
+            maxResults=50
         )
     response = request.execute()
 
@@ -54,10 +65,10 @@ def collect_video_ids(youtube, playlist_id):
     
     while next_page_token is not None:
         request = youtube.playlistItems().list(
-            part="snippet,contentDetails",
-            playlistId=playlist_id,
-            maxResults=50,
-            pageToken=next_page_token
+                part="snippet,contentDetails",
+                playlistId=playlist_id,
+                maxResults=50,
+                pageToken=next_page_token
             )
         response = request.execute()
 
