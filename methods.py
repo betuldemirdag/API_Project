@@ -1,3 +1,5 @@
+import pandas as pd
+
 def collect_channel_stats(youtube, channel_ids):
     """
     Get channel statistics: title, subscriber count, view count, video count, upload playlist
@@ -22,7 +24,7 @@ def collect_channel_stats(youtube, channel_ids):
     response = request.execute()
 
     # loop through items in response
-    for item in response["items"]:
+    for item in response:
         data = {'channelName': item['snippet']['title'],
                 'subscribers': item['statistics']['subscriberCount'],
                 'views': item['statistics']['viewCount'],
