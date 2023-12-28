@@ -1,6 +1,6 @@
 import pandas as pd
 
-def get_data(limit):
+def get_data(limit, sp):
     """
     getting data for spesific user: artist_name, popularity, genre, followers
 
@@ -12,6 +12,7 @@ def get_data(limit):
 
     Dataframe of the artist list of following of the selected user
     """
+    
 
     all_data = []
 
